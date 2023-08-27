@@ -1,0 +1,77 @@
+package task.TasksOasis;
+import java.util.Random;
+import java.util.Scanner;
+
+class GAME{
+  private int number;
+  private int maximumAttempts;
+  private int attempts;
+
+  public GAME()
+  {
+    number = new Random().nextInt(100) + 1;
+    maximumAttempts = 3;
+    attempts = 0;
+  }
+
+  public void rules()
+  {
+      Scanner sc = new Scanner(System.in);
+      System.out.println("NUMBER GUESSING GAME");
+      while(attempts < maximumAttempts)
+      {
+        attempts++;
+        System.out.println("Enter your Number : ");
+        int userInput = sc.nextInt();
+
+        if (userInput == number)
+        {
+          System.out.println("You guessed it right! You did it in " + attempts + " attempts.");
+          Score();
+          break;
+        }
+        else if(userInput < number)
+        {
+          System.out.println("Your number is less than the actual number.");
+        }
+        else if(attempts >= maximumAttempts)
+        {
+          System.out.println("You're out of attempts. The actual number is " + number);
+          System.out.println("Your Score: 0");
+        }
+        else{
+           System.out.println("Your number is greater than the actual number.");
+        }
+      }
+      sc.close();
+  }
+
+
+  public void Score()
+  {
+    int score = 0;
+    if(attempts == 1)
+    {
+      score = 3000;
+    }
+    else if(attempts == 2)
+    {
+      score = 2000;
+    }
+    else
+    {
+      score = 1000;
+    }
+    System.out.println("Your Score: " + score);
+  }
+}
+
+
+public class NumberGuessingGame
+{
+  public static void main(String args[])
+  {
+    GAME g = new GAME();
+    g.rules();
+  }
+}
