@@ -1,0 +1,143 @@
+package task.TasksOasis;
+import java.util.Scanner;
+
+class UserDetails
+{
+       private String  userId;
+       private int userPin;
+       private double balance;
+       private String transactionHistory;
+
+
+       Scanner s = new Scanner(System.in);
+
+
+       public UserDetails(String userId, int userPin, double minAmount)
+       {
+        this.userId = userId;
+        this.userPin = userPin;
+        this.balance = minAmount;
+        this.transactionHistory = " ";
+       }
+
+       public void deposit(double amount)
+       {
+        balance += amount;
+        transaction(amount);
+       }
+
+       
+      public boolean withdraw(double amount)
+       {
+        if(balance  >= amount)
+        {
+          balance -= amount;
+          transaction(-amount);
+          return true;
+        }
+        else
+        {
+          System.out.println("Insufficient Balance");
+          return false;
+        }
+       }
+
+       public void transfer(UserDetails otherUser, double amount)
+       {
+        boolean a = this.withdraw(amount);
+        if(a)
+        {
+          otherUser.deposit(amount);
+
+        }
+      }
+
+      public void transaction(double amount)
+      {
+        transactionHistory += amount + "\n";
+      }
+
+      public String getHistory()
+      {
+        return transactionHistory;
+      }
+       }
+
+
+ class AtmInterface {
+  private UserDetails user;
+
+
+  public UserDetails login(String userId, int userPin)
+  {
+    user = new UserDetails(userId,userPin,1000.0);
+    if(user != null)
+    {
+      System.out.println("LoggedIn.");
+    }
+    else{
+      System.out.println("Login Failed");
+    }
+    return user;
+  }
+}
+public class ATM {
+public static void main(String[] args) {
+
+  AtmInterface a = new AtmInterface();
+
+  Scanner sc = new Scanner(System.in);
+  System.out.println("Welcome");
+  System.out.print("Enter user ID: ");
+  String userId = sc.next();
+  System.out.print("Enter PIN: ");
+  int userPin = sc.nextInt();
+
+  UserDetails User = a.login(userId, userPin);
+  if(User != null)
+  {
+    System.out.println("Welcome");
+    while(true) {
+      System.out.println("1.Deposit");
+      System.out.println("2.Withdraw");
+      System.out.println("3.Transfer");
+      System.out.println("4.Transaction History");
+      System.out.println("5.Exit");
+      System.out.println("Enter your choice");
+      int ch = sc.nextInt();
+
+      switch(ch)
+      {
+        case 1:
+        System.out.print("Enter deposit amount:");
+        double depositAmount = sc.nextDouble();
+        User.deposit(depositAmount);
+        System.out.println("Deposit successful.");
+        break;
+        case 2:
+        System.out.print("Enter withdrawal amount:");
+        double withdrawAmount = sc.nextDouble();
+        User.withdraw(withdrawAmount);
+        break;
+        case 3:
+        System.out.print("Enter user ID: ");
+        String otherId = sc.next();
+        System.out.print("Enter amount: ");
+        double Amount = sc.nextDouble();
+        UserDetails newId = new UserDetails(otherId, userPin,0.0);
+        User.transfer(newId, Amount);
+        break;
+        case 4:
+        System.out.println("Transaction History:");
+        System.out.println(User.getHistory());
+        break;
+        case 5:
+        sc.close();
+        System.exit(0);
+      }
+    }
+  } else{
+    System.out.println("Login failed.");
+  }
+    }
+}
